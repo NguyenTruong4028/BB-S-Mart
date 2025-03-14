@@ -8,7 +8,15 @@ let employees = [
    
 ];
 
-// Hiển thị danh sách sản phẩm
+// Thêm hàm xóa sản phẩm
+function deleteProduct(index) {
+    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+        products.splice(index, 1);
+        displayProducts();
+    }
+}
+
+// Cập nhật hàm hiển thị sản phẩm để thêm nút sửa và xóa
 function displayProducts(filteredProducts = products) {
     const productList = document.getElementById('productList');
     if (!productList) return;
@@ -25,6 +33,12 @@ function displayProducts(filteredProducts = products) {
             <td class="table-cell">0</td>
             <td class="table-cell">${product.createdAt}</td>
             <td class="table-cell">${product.expectedOut}</td>
+            <td class="table-cell">
+                <div style="display: flex; justify-content: flex-start;">
+                    <button class="action-btn btn-edit" onclick="openModal('edit', ${index})"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn btn-delete" onclick="deleteProduct(${index})"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>
         `;
         productList.appendChild(row);
     });
