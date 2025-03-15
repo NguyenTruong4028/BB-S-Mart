@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="bg-gray">
+    <!-- HEADER -->
     <header class="header">
       <div class="logo">
         <img
@@ -39,7 +40,7 @@
         </div>
       </nav>
     </header>
-
+    <!-- END HEADER -->
     <div class="container">
       <nav class="sidebar" id="sidebar">
         <h3 class="sidebar-title">Loại hàng</h3>
@@ -52,8 +53,8 @@
           </select>
         </div>
       </nav>
-
       <main class="content">
+      <!-- HÀNG HÓA -->
         <div id="products-tab" class="tab-content">
           <div class="header-content">
             <h2 class="header-title">Hàng hóa</h2>
@@ -98,222 +99,6 @@
             </button>
           </div>
         </div>
-
-        <!-- Tab Nhân viên -->
-        <div id="employees-tab" class="tab-content hidden">
-          <div class="header-content">
-            <h2 class="header-title">Nhân viên</h2>
-            <div class="actions">
-              <input
-                type="text"
-                id="employeeSearchInput"
-                placeholder="Tìm kiếm nhân viên"
-                class="search-input"
-                onkeyup="searchEmployees()"
-              />
-              <button class="btn-create" onclick="openEmployeeModal('add')">
-                <i class="fas fa-plus btn-icon"></i> Thêm nhân viên
-              </button>
-            </div>
-          </div>
-          <table class="product-table">
-            <thead>
-              <tr class="table-header">
-                <th class="table-cell"><input type="checkbox" /></th>
-                <th class="table-cell">Mã nhân viên</th>
-                <th class="table-cell">Tên nhân viên</th>
-                <th class="table-cell">Số điện thoại</th>
-                <th class="table-cell">Email</th>
-                <th class="table-cell">Vai trò</th>
-                <th class="table-cell">Thời gian tạo</th>
-                <th class="table-cell">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody id="employeeList"></tbody>
-          </table>
-        </div>
-
-        <!-- Customers Tab Content -->
-        <div id="customers-tab" class="tab-content hidden">
-          <div class="header-content">
-            <h2 class="header-title">Khách hàng</h2>
-            <div class="actions">
-              <input
-                type="text"
-                id="customerSearchInput"
-                placeholder="Tìm kiếm khách hàng"
-                class="search-input"
-                onkeyup="searchCustomers()"
-              />
-              <button class="btn-create" onclick="openCustomerModal('add')">
-                <i class="fas fa-plus btn-icon"></i> Thêm khách hàng
-              </button>
-              <button class="btn-import">
-                <i class="fas fa-file-import btn-icon"></i> Import
-              </button>
-            </div>
-          </div>
-          <table class="product-table">
-            <thead>
-              <tr class="table-header">
-                <th class="table-cell"><input type="checkbox" /></th>
-                <th class="table-cell">Mã khách hàng</th>
-                <th class="table-cell">Tên khách hàng</th>
-                <th class="table-cell">Số điện thoại</th>
-                <th class="table-cell">Email</th>
-                <th class="table-cell">Địa chỉ</th>
-                <th class="table-cell">Nhóm khách</th>
-                <th class="table-cell">Ngày tạo</th>
-                <th class="table-cell">điểm tích lũy</th>
-                <th class="table-cell">lịch sử</th>
-
-                <th class="table-cell">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody id="customerList"></tbody>
-          </table>
-
-          <!-- Modal thêm/sửa khách hàng -->
-          <div id="customerModal" class="modal hidden">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 id="customerModalTitle" class="modal-title">
-                  Thêm khách hàng
-                </h1>
-                <button class="modal-close" onclick="closeCustomerModal()">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-              <form id="customerForm" class="modal-form">
-                <div class="form-grid">
-                  <div>
-                    <div class="form-group">
-                      <label class="form-label">Mã khách hàng</label>
-                      <input
-                        id="customerCode"
-                        class="form-input"
-                        disabled
-                        placeholder="Mã tự động"
-                        type="text"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Tên khách hàng</label>
-                      <input
-                        id="customerName"
-                        class="form-input"
-                        type="text"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Số điện thoại</label>
-                      <input
-                        id="customerPhone"
-                        class="form-input"
-                        type="text"
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Email</label>
-                      <input
-                        id="customerEmail"
-                        class="form-input"
-                        type="email"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div class="form-group">
-                      <label class="form-label">Địa chỉ</label>
-                      <textarea
-                        id="customerAddress"
-                        class="form-input"
-                        rows="3"
-                      ></textarea>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Nhóm khách</label>
-                      <div class="form-select-group">
-                        <select id="customerGroup" class="form-select">
-                          <option value="retail">Khách lẻ</option>
-                          <option value="wholesale">Khách sỉ</option>
-                          <option value="vip">Khách VIP</option>
-                        </select>
-                        <button type="button" class="form-select-btn">
-                          <i class="fas fa-plus"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Ghi chú</label>
-                      <textarea
-                        id="customerNote"
-                        class="form-input"
-                        rows="2"
-                      ></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-actions">
-                  <button type="submit" class="btn-save">
-                    <i class="fas fa-save btn-icon"></i> Lưu
-                  </button>
-                  <button
-                    type="button"
-                    onclick="saveAndAddNewCustomer()"
-                    class="btn-save"
-                  >
-                    <i class="fas fa-plus btn-icon"></i> Lưu & Thêm mới
-                  </button>
-                  <button
-                    type="button"
-                    onclick="closeCustomerModal()"
-                    class="btn-cancel"
-                  >
-                    <i class="fas fa-times btn-icon"></i> Bỏ qua
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <!-- khach hang -->
-
-        <div id="purchaseHistory-tab" class="tab-content hidden">
-          <div class="header-content">
-            <h2 class="header-title">Lịch sử mua</h2>
-            <div class="actions">
-              <input
-                type="text"
-                id="purchaseSearchInput"
-                placeholder="Tìm kiếm lịch sử mua"
-                class="search-input"
-              />
-              <button onclick="searchOrderById()">Tìm kiếm</button>
-            </div>
-          </div>
-
-          <div>
-            <label for="startDate">Ngày bắt đầu:</label>
-            <input type="date" id="startDate" />
-
-            <label for="endDate">Ngày kết thúc:</label>
-            <input type="date" id="endDate" />
-
-            <button onclick="filterOrdersByDateRange()">Lọc</button>
-            <button onclick="clearFilter()">Xóa lọc</button>
-          </div>
-
-          <div id="purchaseHistoryList"></div>
-        </div>
-        <!-- end -->
-
-        <div id="sales-tab" class="tab-content hidden">
-          <h2 class="header-title">Bán hàng</h2>
-        </div>
-
         <!-- Modal thêm/sửa hàng hóa -->
         <div id="modal" class="modal hidden">
           <div class="modal-content">
@@ -506,7 +291,102 @@
             </form>
           </div>
         </div>
+      <!-- END HÀNG HÓA -->
 
+      <!-- NHÂN VIÊN -->
+        <div id="employees-tab" class="tab-content hidden">
+          <div class="header-content">
+            <h2 class="header-title">Nhân viên</h2>
+            <div class="actions">
+              <input
+                type="text"
+                id="employeeSearchInput"
+                placeholder="Tìm kiếm nhân viên"
+                class="search-input"
+                onkeyup="searchEmployees()"
+              />
+              <button class="btn-create" onclick="openEmployeeModal('add')">
+                <i class="fas fa-plus btn-icon"></i> Thêm nhân viên
+              </button>
+            </div>
+          </div>
+          <table class="product-table">
+            <thead>
+              <tr class="table-header">
+                <th class="table-cell"><input type="checkbox" /></th>
+                <th class="table-cell">Mã nhân viên</th>
+                <th class="table-cell">Tên nhân viên</th>
+                <th class="table-cell">Số điện thoại</th>
+                <th class="table-cell">Email</th>
+                <th class="table-cell">Vai trò</th>
+                <th class="table-cell">Thời gian tạo</th>
+                <th class="table-cell">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="employeeList"></tbody>
+          </table>
+        </div>
+        <!-- Modal phân quyền nhân viên -->
+        <div id="permissionModal" class="modal hidden">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title">Phân quyền nhân viên</h1>
+              <button class="modal-close" onclick="closePermissionModal()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <form id="permissionForm" class="modal-form">
+              <div class="form-group">
+                <label class="form-label"
+                  >Tên nhân viên: <span id="employeeNameDisplay"></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quyền truy cập</label>
+                <div class="form-group flex items-center">
+                  <input
+                    id="viewProducts"
+                    class="form-checkbox"
+                    type="checkbox"
+                  />
+                  <label class="form-label ml-2">Xem hàng hóa</label>
+                </div>
+                <div class="form-group flex items-center">
+                  <input
+                    id="editProducts"
+                    class="form-checkbox"
+                    type="checkbox"
+                  />
+                  <label class="form-label ml-2">Sửa hàng hóa</label>
+                </div>
+                <div class="form-group flex items-center">
+                  <input id="viewSales" class="form-checkbox" type="checkbox" />
+                  <label class="form-label ml-2">Xem bán hàng</label>
+                </div>
+                <div class="form-group flex items-center">
+                  <input
+                    id="manageEmployees"
+                    class="form-checkbox"
+                    type="checkbox"
+                  />
+                  <label class="form-label ml-2">Quản lý nhân viên</label>
+                </div>
+              </div>
+              <div class="modal-actions">
+                <button type="submit" class="btn-save">
+                  <i class="fas fa-save btn-icon"></i> Lưu
+                </button>
+                <button
+                  type="button"
+                  onclick="closePermissionModal()"
+                  class="btn-cancel"
+                >
+                  <i class="fas fa-times btn-icon"></i> Bỏ qua
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
         <!-- Modal thêm/sửa nhân viên -->
         <div id="employeeModal" class="modal hidden">
           <div class="modal-content">
@@ -570,68 +450,189 @@
             </form>
           </div>
         </div>
+      <!-- END NHÂN VIÊN -->
 
-        <!-- Modal phân quyền nhân viên -->
-        <div id="permissionModal" class="modal hidden">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title">Phân quyền nhân viên</h1>
-              <button class="modal-close" onclick="closePermissionModal()">
-                <i class="fas fa-times"></i>
+      <!-- KHÁCH HÀNG -->
+        <div id="customers-tab" class="tab-content hidden">
+          <div class="header-content">
+            <h2 class="header-title">Khách hàng</h2>
+            <div class="actions">
+              <input
+                type="text"
+                id="customerSearchInput"
+                placeholder="Tìm kiếm khách hàng"
+                class="search-input"
+                onkeyup="searchCustomers()"
+              />
+              <button class="btn-create" onclick="openCustomerModal('add')">
+                <i class="fas fa-plus btn-icon"></i> Thêm khách hàng
+              </button>
+              <button class="btn-import">
+                <i class="fas fa-file-import btn-icon"></i> Import
               </button>
             </div>
-            <form id="permissionForm" class="modal-form">
-              <div class="form-group">
-                <label class="form-label"
-                  >Tên nhân viên: <span id="employeeNameDisplay"></span
-                ></label>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Quyền truy cập</label>
-                <div class="form-group flex items-center">
-                  <input
-                    id="viewProducts"
-                    class="form-checkbox"
-                    type="checkbox"
-                  />
-                  <label class="form-label ml-2">Xem hàng hóa</label>
-                </div>
-                <div class="form-group flex items-center">
-                  <input
-                    id="editProducts"
-                    class="form-checkbox"
-                    type="checkbox"
-                  />
-                  <label class="form-label ml-2">Sửa hàng hóa</label>
-                </div>
-                <div class="form-group flex items-center">
-                  <input id="viewSales" class="form-checkbox" type="checkbox" />
-                  <label class="form-label ml-2">Xem bán hàng</label>
-                </div>
-                <div class="form-group flex items-center">
-                  <input
-                    id="manageEmployees"
-                    class="form-checkbox"
-                    type="checkbox"
-                  />
-                  <label class="form-label ml-2">Quản lý nhân viên</label>
-                </div>
-              </div>
-              <div class="modal-actions">
-                <button type="submit" class="btn-save">
-                  <i class="fas fa-save btn-icon"></i> Lưu
-                </button>
-                <button
-                  type="button"
-                  onclick="closePermissionModal()"
-                  class="btn-cancel"
-                >
-                  <i class="fas fa-times btn-icon"></i> Bỏ qua
+          </div>
+          <table class="product-table">
+            <thead>
+              <tr class="table-header">
+                <th class="table-cell"><input type="checkbox" /></th>
+                <th class="table-cell">Mã khách hàng</th>
+                <th class="table-cell">Tên khách hàng</th>
+                <th class="table-cell">Số điện thoại</th>
+                <th class="table-cell">Email</th>
+                <th class="table-cell">Địa chỉ</th>
+                <th class="table-cell">Nhóm khách</th>
+                <th class="table-cell">Ngày tạo</th>
+                <th class="table-cell">điểm tích lũy</th>
+                <th class="table-cell">lịch sử</th>
+
+                <th class="table-cell">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="customerList"></tbody>
+          </table>
+
+          <!-- Modal thêm/sửa khách hàng -->
+          <div id="customerModal" class="modal hidden">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 id="customerModalTitle" class="modal-title">
+                  Thêm khách hàng
+                </h1>
+                <button class="modal-close" onclick="closeCustomerModal()">
+                  <i class="fas fa-times"></i>
                 </button>
               </div>
-            </form>
+              <form id="customerForm" class="modal-form">
+                <div class="form-grid">
+                  <div>
+                    <div class="form-group">
+                      <label class="form-label">Mã khách hàng</label>
+                      <input
+                        id="customerCode"
+                        class="form-input"
+                        disabled
+                        placeholder="Mã tự động"
+                        type="text"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Tên khách hàng</label>
+                      <input
+                        id="customerName"
+                        class="form-input"
+                        type="text"
+                        required
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Số điện thoại</label>
+                      <input
+                        id="customerPhone"
+                        class="form-input"
+                        type="text"
+                        required
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Email</label>
+                      <input
+                        id="customerEmail"
+                        class="form-input"
+                        type="email"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div class="form-group">
+                      <label class="form-label">Địa chỉ</label>
+                      <textarea
+                        id="customerAddress"
+                        class="form-input"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Nhóm khách</label>
+                      <div class="form-select-group">
+                        <select id="customerGroup" class="form-select">
+                          <option value="retail">Khách lẻ</option>
+                          <option value="wholesale">Khách sỉ</option>
+                          <option value="vip">Khách VIP</option>
+                        </select>
+                        <button type="button" class="form-select-btn">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Ghi chú</label>
+                      <textarea
+                        id="customerNote"
+                        class="form-input"
+                        rows="2"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-actions">
+                  <button type="submit" class="btn-save">
+                    <i class="fas fa-save btn-icon"></i> Lưu
+                  </button>
+                  <button
+                    type="button"
+                    onclick="saveAndAddNewCustomer()"
+                    class="btn-save"
+                  >
+                    <i class="fas fa-plus btn-icon"></i> Lưu & Thêm mới
+                  </button>
+                  <button
+                    type="button"
+                    onclick="closeCustomerModal()"
+                    class="btn-cancel"
+                  >
+                    <i class="fas fa-times btn-icon"></i> Bỏ qua
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
+        <!-- LỊCH SỬ MUA HÀNG -->
+        <div id="purchaseHistory-tab" class="tab-content hidden">
+          <div class="header-content">
+            <h2 class="header-title">Lịch sử mua</h2>
+            <div class="actions">
+              <input
+                type="text"
+                id="purchaseSearchInput"
+                placeholder="Tìm kiếm lịch sử mua"
+                class="search-input"
+              />
+              <button onclick="searchOrderById()">Tìm kiếm</button>
+            </div>
+          </div>
+
+          <div>
+            <label for="startDate">Ngày bắt đầu:</label>
+            <input type="date" id="startDate" />
+
+            <label for="endDate">Ngày kết thúc:</label>
+            <input type="date" id="endDate" />
+
+            <button onclick="filterOrdersByDateRange()">Lọc</button>
+            <button onclick="clearFilter()">Xóa lọc</button>
+          </div>
+
+          <div id="purchaseHistoryList"></div>
+        </div>
+      <!-- END KHÁCH HÀNG-->
+
+      <!-- BÁN HÀNG -->
+        <div id="sales-tab" class="tab-content hidden">
+          <h2 class="header-title">Bán hàng</h2>
+        </div>
+      <!-- END BÁN HÀNG -->
       </main>
     </div>
     <script src="script.js"></script>
