@@ -519,6 +519,158 @@
             </div>
         </main>
     </div>
+    <!-- Modal đăng nhập -->
+<div id="loginModal" class="modal hidden">
+    <div class="modal-content" style="max-width: 30rem;">
+        <div class="modal-header">
+            <h1 class="modal-title">Đăng nhập</h1>
+            <button class="modal-close" onclick="closeLoginModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="loginForm" class="modal-form" style="display: block;">
+            <div class="form-group">
+                <label class="form-label">Tên đăng nhập</label>
+                <input id="loginUsername" class="form-input" type="text" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mật khẩu</label>
+                <input id="loginPassword" class="form-input" type="password" required>
+            </div>
+            <div style="text-align: right; margin-bottom: 1rem;">
+                <a href="#" onclick="showRegisterModal()" style="color: #1d4ed8; text-decoration: none;">Chưa có tài khoản? Đăng ký</a>
+            </div>
+            <div class="modal-actions" style="justify-content: center;">
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-sign-in-alt btn-icon"></i> Đăng nhập
+                </button>
+                <button type="button" onclick="closeLoginModal()" class="btn-cancel">
+                    <i class="fas fa-times btn-icon"></i> Hủy
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal đăng ký -->
+<div id="registerModal" class="modal hidden">
+    <div class="modal-content" style="max-width: 30rem;">
+        <div class="modal-header">
+            <h1 class="modal-title">Đăng ký tài khoản</h1>
+            <button class="modal-close" onclick="closeRegisterModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="registerForm" class="modal-form" style="display: block;">
+            <div class="form-group">
+                <label class="form-label">Tên đăng nhập</label>
+                <input id="registerUsername" class="form-input" type="text" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mật khẩu</label>
+                <input id="registerPassword" class="form-input" type="password" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Họ tên</label>
+                <input id="registerFullName" class="form-input" type="text" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Số điện thoại</label>
+                <input id="registerPhone" class="form-input" type="tel" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input id="registerEmail" class="form-input" type="email" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Địa chỉ</label>
+                <textarea id="registerAddress" class="form-input" rows="3" required></textarea>
+            </div>
+            <div style="text-align: right; margin-bottom: 1rem;">
+                <a href="#" onclick="showLoginModal()" style="color: #1d4ed8; text-decoration: none;">Đã có tài khoản? Đăng nhập</a>
+            </div>
+            <div class="modal-actions" style="justify-content: center;">
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-user-plus btn-icon"></i> Đăng ký
+                </button>
+                <button type="button" onclick="closeRegisterModal()" class="btn-cancel">
+                    <i class="fas fa-times btn-icon"></i> Hủy
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal thông tin cá nhân -->
+<div id="profileModal" class="modal hidden">
+    <div class="modal-content" style="max-width: 40rem;">
+        <div class="modal-header">
+            <h1 class="modal-title">Thông tin cá nhân</h1>
+            <button class="modal-close" onclick="closeProfileModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-form" style="display: block;">
+            <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem;">
+                <div style="flex-shrink: 0;">
+                    <div style="width: 100px; height: 100px; background-color: #e5e7eb; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                        <i class="fas fa-user" style="font-size: 3rem; color: #9ca3af;"></i>
+                    </div>
+                </div>
+                <div style="flex-grow: 1;">
+                    <h2 id="profileName" style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">Trương Văn A</h2>
+                    <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                        <span class="badge" style="background-color: #22c55e; color: white; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; margin-right: 0.5rem;">Thành viên</span>
+                        <span id="profilePoints" style="color: #f59e0b; font-weight: 600;">150 điểm</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <div id="profileUsername" class="form-display">Truong123</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Số điện thoại</label>
+                    <div id="profilePhone" class="form-display">0987654321</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <div id="profileEmail" class="form-display">truong@example.com</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ngày tham gia</label>
+                    <div id="profileJoinDate" class="form-display">15/03/2025</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Địa chỉ</label>
+                <div id="profileAddress" class="form-display">123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh</div>
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn-save" onclick="showEditProfileModal()">
+                    <i class="fas fa-edit btn-icon"></i> Chỉnh sửa thông tin
+                </button>
+                <button type="button" class="btn-cancel" onclick="logout()">
+                    <i class="fas fa-sign-out-alt btn-icon"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thêm CSS cho hiển thị thông tin -->
+<style>
+    .form-display {
+        padding: 0.5rem;
+        background-color: #f3f4f6;
+        border-radius: 0.25rem;
+        min-height: 2.5rem;
+    }
+</style>
     <script src="script.js"></script>
 </body>
 </html>

@@ -795,3 +795,152 @@ function searchOrderById() {
   }
 }
 // khach hang va lich su
+// Lưu trữ thông tin người dùng
+let users = [
+  {
+      username: "Truong123",
+      password: "password123",
+      fullName: "Trương Văn A",
+      phone: "0987654321",
+      email: "truong@example.com",
+      address: "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+      points: 150,
+      joinDate: "15/03/2025"
+  }
+];
+
+// Người dùng hiện tại
+let currentUser = users[0]; // Đặt mặc định là đã đăng nhập
+
+// Hiển thị modal đăng nhập
+function showLoginModal() {
+  document.getElementById('registerModal').classList.add('hidden');
+  document.getElementById('loginModal').classList.remove('hidden');
+}
+
+// Đóng modal đăng nhập
+function closeLoginModal() {
+  document.getElementById('loginModal').classList.add('hidden');
+}
+
+// Hiển thị modal đăng ký
+function showRegisterModal() {
+  document.getElementById('loginModal').classList.add('hidden');
+  document.getElementById('registerModal').classList.remove('hidden');
+}
+
+// Đóng modal đăng ký
+function closeRegisterModal() {
+  document.getElementById('registerModal').classList.add('hidden');
+}
+
+// Hiển thị modal thông tin cá nhân
+function showProfileModal() {
+  // Cập nhật thông tin người dùng vào modal
+  document.getElementById('profileName').textContent = currentUser.fullName;
+  document.getElementById('profilePoints').textContent = currentUser.points + " điểm";
+  document.getElementById('profileUsername').textContent = currentUser.username;
+  document.getElementById('profilePhone').textContent = currentUser.phone;
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('profileAddress').textContent = currentUser.address;
+  document.getElementById('profileJoinDate').textContent = currentUser.joinDate;
+  
+  document.getElementById('profileModal').classList.remove('hidden');
+}
+
+// Đóng modal thông tin cá nhân
+function closeProfileModal() {
+  document.getElementById('profileModal').classList.add('hidden');
+}
+
+// Xử lý đăng nhập
+function handleLogin(e) {
+  e.preventDefault();
+  
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  const user = users.find(u => u.username === username && u.password === password);
+  
+  if (user) {
+      currentUser = user;
+      updateProfileDisplay();
+      closeLoginModal();
+      alert('Đăng nhập thành công!');
+  } else {
+      alert('Tên đăng nhập hoặc mật khẩu không đúng!');
+  }
+}
+
+// Xử lý đăng ký
+function handleRegister(e) {
+  e.preventDefault();
+  
+  const username = document.getElementById('registerUsername').value;
+  
+  // Kiểm tra xem tên đăng nhập đã tồn tại chưa
+  if (users.some(u => u.username === username)) {
+      alert('Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.');
+      return;
+  }
+  
+  const newUser = {
+      username: username,
+      password: document.getElementById('registerPassword').value,
+      fullName: document.getElementById('registerFullName').value,
+      phone: document.getElementById('registerPhone').value,
+      email: document.getElementById('registerEmail').value,
+      address: document.getElementById('registerAddress').value,
+      points: 0,
+      joinDate: new Date().toLocaleDateString('vi-VN')
+  };
+  
+  users.push(newUser);
+  currentUser = newUser;
+  updateProfileDisplay();
+  closeRegisterModal();
+  alert('Đăng ký thành công!');
+}
+
+// Xử lý đăng xuất
+function logout() {
+  currentUser = null;
+  updateProfileDisplay();
+  closeProfileModal();
+  showLoginModal();
+}
+
+// Cập nhật hiển thị thông tin người dùng trên giao diện
+function updateProfileDisplay() {
+  const userProfileElement = document.querySelector('.user-profile');
+  
+  if (currentUser) {
+      userProfileElement.innerHTML = `
+          ${currentUser.username} <i class="fas fa-user-circle user-icon"></i>
+      `;
+      userProfileElement.onclick = showProfileModal;
+  } else {
+      userProfileElement.innerHTML = `
+          Đăng nhập <i class="fas fa-sign-in-alt user-icon"></i>
+      `;
+      userProfileElement.onclick = showLoginModal;
+  }
+}
+
+// Khởi tạo khi trang được tải
+document.addEventListener('DOMContentLoaded', function() {
+  // Thiết lập xử lý form đăng nhập
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+      loginForm.addEventListener('submit', handleLogin);
+  }
+  
+  // Thiết lập xử lý form đăng ký
+  const registerForm = document.getElementById('registerForm');
+  if (registerForm) {
+      registerForm.addEventListener('submit', handleRegister);
+  }
+  
+  // Cập nhật hiển thị thông tin người dùng
+  updateProfileDisplay();
+});
