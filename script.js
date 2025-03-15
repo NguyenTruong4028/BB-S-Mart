@@ -152,12 +152,10 @@ function saveAndLink() {
   addProduct(event);
   openModal("add");
 }
-
 function saveAndAddNew() {
   addProduct(event);
   openModal("add");
 }
-
 function saveAndCopy() {
   addProduct(event);
   openModal("add");
@@ -314,6 +312,7 @@ function filterProducts() {
   }
   displayProducts(filteredProducts);
 }
+
 // Tìm kiếm sản phẩm
 function searchProducts() {
   const searchTerm = document.getElementById("searchInput").value.toLowerCase();
@@ -339,7 +338,6 @@ function searchEmployees() {
   );
   displayEmployees(filteredEmployees);
 }
-
 window.onload = function () {
   showTab("products");
 };
@@ -754,7 +752,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function filterOrdersByDateRange() {
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
-
   // Chuyển đổi ngày bắt đầu và ngày kết thúc thành đối tượng Date
   const start = new Date(startDate);
   const end = new Date(endDate);

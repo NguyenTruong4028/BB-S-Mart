@@ -537,3 +537,27 @@
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
+/* Thông tin đăng nhập */
+.form-display {
+  padding: 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+  min-height: 2.5rem;
+}
+
+.role-badge {
+  display: inline-block;
+}
+
+.role-badge[data-role="staff"] {
+  background-color: #3b82f6; /* blue */
+}
+
+.role-badge[data-role="owner"] {
+  background-color: #f59e0b; /* amber */
+}
+
+.hidden {
+  display: none !important;
+}
+/* Hết thông tin đăng nhập */
