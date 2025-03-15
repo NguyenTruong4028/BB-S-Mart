@@ -4,7 +4,15 @@ let products = [];
 // Danh sách nhân viên
 let employees = [];
 
-// Hiển thị danh sách sản phẩm
+// Thêm hàm xóa sản phẩm
+function deleteProduct(index) {
+    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+        products.splice(index, 1);
+        displayProducts();
+    }
+}
+
+// Cập nhật hàm hiển thị sản phẩm để thêm nút sửa và xóa
 function displayProducts(filteredProducts = products) {
   const productList = document.getElementById("productList");
   if (!productList) return;
@@ -21,6 +29,12 @@ function displayProducts(filteredProducts = products) {
             <td class="table-cell">0</td>
             <td class="table-cell">${product.createdAt}</td>
             <td class="table-cell">${product.expectedOut}</td>
+            <td class="table-cell">
+                <div style="display: flex; justify-content: flex-start;">
+                    <button class="action-btn btn-edit" onclick="openModal('edit', ${index})"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn btn-delete" onclick="deleteProduct(${index})"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>
         `;
     productList.appendChild(row);
   });
@@ -780,4 +794,196 @@ function searchOrderById() {
     alert("Không tìm thấy đơn hàng nào với ID đã nhập.");
   }
 }
-// khach hang va lich su
+
+// Lưu trữ thông tin nhân viên
+let users = [
+  {
+      username: "Truong123",
+      password: "Truong123",
+      fullName: "Nguyễn Hồng Trường",
+      phone: "0365282067",
+      email: "truong.nh.0428@gmail.com",
+      address: "Thiên đường",
+      role: "owner",
+      joinDate: "15/01/2025"
+  },
+  {
+      username: "staff",
+      password: "staff123",
+      fullName: "Lê Văn Nhân",
+      phone: "0987654323",
+      email: "staff@example.com",
+      address: "789 Đường Phạm Ngũ Lão, Phường Phạm Ngũ Lão, Quận 1, TP. Hồ Chí Minh",
+      role: "staff",
+      joinDate: "15/02/2025"
+  },
+  {
+      username: "staff2",
+      password: "staff456",
+      fullName: "Trần Thị Bình",
+      phone: "0987654324",
+      email: "staff2@example.com",
+      address: "456 Đường Hai Bà Trưng, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+      role: "staff",
+      joinDate: "01/03/2025"
+  }
+];
+
+// Người dùng hiện tại
+let currentUser = null; // Mặc định chưa đăng nhập
+
+// Hiển thị modal đăng nhập
+function showLoginModal() {
+  document.getElementById('loginModal').classList.remove('hidden');
+}
+
+// Đóng modal đăng nhập
+function closeLoginModal() {
+  document.getElementById('loginModal').classList.add('hidden');
+}
+
+// Hiển thị modal thông tin cá nhân
+function showProfileModal() {
+  // Cập nhật thông tin người dùng vào modal
+  document.getElementById('profileName').textContent = currentUser.fullName;
+  
+  const roleElement = document.getElementById('profileRole');
+  roleElement.textContent = getRoleDisplayName(currentUser.role);
+  roleElement.dataset.role = currentUser.role;
+  
+  document.getElementById('profileUsername').textContent = currentUser.username;
+  document.getElementById('profilePhone').textContent = currentUser.phone;
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('profileAddress').textContent = currentUser.address;
+  document.getElementById('profileJoinDate').textContent = currentUser.joinDate;
+  
+  document.getElementById('profileModal').classList.remove('hidden');
+}
+
+// Đóng modal thông tin cá nhân
+function closeProfileModal() {
+  document.getElementById('profileModal').classList.add('hidden');
+}
+
+// Hiển thị modal chỉnh sửa thông tin
+function showEditProfileModal() {
+  // Điền thông tin hiện tại vào form
+  document.getElementById('editFullName').value = currentUser.fullName;
+  document.getElementById('editPhone').value = currentUser.phone;
+  document.getElementById('editEmail').value = currentUser.email;
+  document.getElementById('editAddress').value = currentUser.address;
+  document.getElementById('editPassword').value = '';
+  
+  // Hiển thị modal
+  closeProfileModal();
+  document.getElementById('editProfileModal').classList.remove('hidden');
+}
+
+// Đóng modal chỉnh sửa thông tin
+function closeEditProfileModal() {
+  document.getElementById('editProfileModal').classList.add('hidden');
+}
+
+// Chuyển đổi mã cấp bậc sang tên hiển thị
+function getRoleDisplayName(role) {
+  switch(role) {
+    case "owner": return "Chủ cửa hàng";
+    case "staff": return "Nhân viên";
+    default: return "Không xác định";
+  }
+}
+
+// Xử lý đăng nhập
+function handleLogin(e) {
+  e.preventDefault();
+  
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  const user = users.find(u => u.username === username && u.password === password);
+  
+  if (user) {
+    currentUser = user;
+    updateProfileDisplay();
+    closeLoginModal();
+    alert('Đăng nhập thành công!');
+  } else {
+    alert('Tên đăng nhập hoặc mật khẩu không đúng!');
+  }
+}
+
+// Xử lý chỉnh sửa thông tin
+function handleEditProfile(e) {
+  e.preventDefault();
+  
+  // Cập nhật thông tin người dùng
+  currentUser.fullName = document.getElementById('editFullName').value;
+  currentUser.phone = document.getElementById('editPhone').value;
+  currentUser.email = document.getElementById('editEmail').value;
+  currentUser.address = document.getElementById('editAddress').value;
+  
+  // Cập nhật mật khẩu nếu được cung cấp
+  const newPassword = document.getElementById('editPassword').value;
+  if (newPassword.trim() !== '') {
+    currentUser.password = newPassword;
+  }
+  
+  // Cập nhật thông tin trong mảng users
+  const userIndex = users.findIndex(u => u.username === currentUser.username);
+  if (userIndex !== -1) {
+    users[userIndex] = currentUser;
+  }
+  
+  // Cập nhật hiển thị
+  updateProfileDisplay();
+  closeEditProfileModal();
+  showProfileModal();
+  alert('Cập nhật thông tin thành công!');
+}
+
+// Xử lý đăng xuất
+function logout() {
+  currentUser = null;
+  updateProfileDisplay();
+  closeProfileModal();
+  showLoginModal();
+}
+
+// Cập nhật hiển thị thông tin người dùng
+function updateProfileDisplay() {
+  const userProfileElement = document.querySelector('.user-profile');
+  
+  if (currentUser) {
+    const roleName = getRoleDisplayName(currentUser.role);
+    userProfileElement.innerHTML = `
+      ${currentUser.fullName} (${roleName}) <i class="fas fa-user-circle user-icon"></i>
+    `;
+    userProfileElement.onclick = showProfileModal;
+  } else {
+    userProfileElement.innerHTML = `
+      Đăng nhập <i class="fas fa-sign-in-alt user-icon"></i>
+    `;
+    userProfileElement.onclick = showLoginModal;
+  }
+}
+
+// Khởi tạo khi trang được tải
+document.addEventListener('DOMContentLoaded', function() {
+  // Thiết lập xử lý form đăng nhập
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
+  }
+  
+  // Thiết lập xử lý form chỉnh sửa thông tin
+  const editProfileForm = document.getElementById('editProfileForm');
+  if (editProfileForm) {
+    editProfileForm.addEventListener('submit', handleEditProfile);
+  }
+  
+  // Cập nhật hiển thị thông tin người dùng
+  updateProfileDisplay();
+  
+  // Hiển thị form đăng nhập khi trang được tải
+  showLoginModal();
+});
