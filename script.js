@@ -910,7 +910,7 @@ function logout() {
   showLoginModal();
 }
 
-// Cập nhật hiển thị thông tin người dùng trên giao diện
+// Cập nhật hiển thị thông tin người dùng
 function updateProfileDisplay() {
   const userProfileElement = document.querySelector('.user-profile');
   
