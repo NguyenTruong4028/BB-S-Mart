@@ -47,6 +47,184 @@
         </nav>
 
         <main class="content">
+             <!-- Customers Tab Content -->
+        <div id="customers-tab" class="tab-content hidden">
+            <div class="header-content">
+              <h2 class="header-title">Khách hàng</h2>
+              <div class="actions">
+                <input
+                  type="text"
+                  id="customerSearchInput"
+                  placeholder="Tìm kiếm khách hàng"
+                  class="search-input"
+                  onkeyup="searchCustomers()"
+                />
+                <button class="btn-create" onclick="openCustomerModal('add')">
+                  <i class="fas fa-plus btn-icon"></i> Thêm khách hàng
+                </button>
+                <button class="btn-import">
+                  <i class="fas fa-file-import btn-icon"></i> Import
+                </button>
+              </div>
+            </div>
+            <table class="product-table">
+              <thead>
+                <tr class="table-header">
+                  <th class="table-cell"><input type="checkbox" /></th>
+                  <th class="table-cell">Mã khách hàng</th>
+                  <th class="table-cell">Tên khách hàng</th>
+                  <th class="table-cell">Số điện thoại</th>
+                  <th class="table-cell">Email</th>
+                  <th class="table-cell">Địa chỉ</th>
+                  <th class="table-cell">Nhóm khách</th>
+                  <th class="table-cell">Ngày tạo</th>
+                  <th class="table-cell">điểm tích lũy</th>
+                  <th class="table-cell">lịch sử</th>
+  
+                  <th class="table-cell">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="customerList"></tbody>
+            </table>
+  
+            <!-- Modal thêm/sửa khách hàng -->
+            <div id="customerModal" class="modal hidden">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 id="customerModalTitle" class="modal-title">
+                    Thêm khách hàng
+                  </h1>
+                  <button class="modal-close" onclick="closeCustomerModal()">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <form id="customerForm" class="modal-form">
+                  <div class="form-grid">
+                    <div>
+                      <div class="form-group">
+                        <label class="form-label">Mã khách hàng</label>
+                        <input
+                          id="customerCode"
+                          class="form-input"
+                          disabled
+                          placeholder="Mã tự động"
+                          type="text"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Tên khách hàng</label>
+                        <input
+                          id="customerName"
+                          class="form-input"
+                          type="text"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Số điện thoại</label>
+                        <input
+                          id="customerPhone"
+                          class="form-input"
+                          type="text"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input
+                          id="customerEmail"
+                          class="form-input"
+                          type="email"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div class="form-group">
+                        <label class="form-label">Địa chỉ</label>
+                        <textarea
+                          id="customerAddress"
+                          class="form-input"
+                          rows="3"
+                        ></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Nhóm khách</label>
+                        <div class="form-select-group">
+                          <select id="customerGroup" class="form-select">
+                            <option value="retail">Khách lẻ</option>
+                            <option value="wholesale">Khách sỉ</option>
+                            <option value="vip">Khách VIP</option>
+                          </select>
+                          <button type="button" class="form-select-btn">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea
+                          id="customerNote"
+                          class="form-input"
+                          rows="2"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-actions">
+                    <button type="submit" class="btn-save">
+                      <i class="fas fa-save btn-icon"></i> Lưu
+                    </button>
+                    <button
+                      type="button"
+                      onclick="saveAndAddNewCustomer()"
+                      class="btn-save"
+                    >
+                      <i class="fas fa-plus btn-icon"></i> Lưu & Thêm mới
+                    </button>
+                    <button
+                      type="button"
+                      onclick="closeCustomerModal()"
+                      class="btn-cancel"
+                    >
+                      <i class="fas fa-times btn-icon"></i> Bỏ qua
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- khach hang -->
+  
+          <div id="purchaseHistory-tab" class="tab-content hidden">
+            <div class="header-content">
+              <h2 class="header-title">Lịch sử mua</h2>
+              <div class="actions">
+                <input
+                  type="text"
+                  id="purchaseSearchInput"
+                  placeholder="Tìm kiếm lịch sử mua"
+                  class="search-input"
+                
+                />
+                <button onclick="searchOrderById()">Tìm kiếm</button>
+              </div>
+            </div>
+  
+            <div>
+              <label for="startDate">Ngày bắt đầu:</label>
+              <input type="date" id="startDate">
+              
+              <label for="endDate">Ngày kết thúc:</label>
+              <input type="date" id="endDate">
+              
+              <button onclick="filterOrdersByDateRange()">Lọc</button>
+              <button onclick="clearFilter()">Xóa lọc</button>
+          </div>
+          
+          <div id="purchaseHistoryList">
+              <!-- Danh sách đơn hàng sẽ được hiển thị ở đây -->
+          </div>
+          <!-- lich su -->
             <div id="products-tab" class="tab-content">
                 <div class="header-content">
                     <h2 class="header-title">Hàng hóa</h2>
