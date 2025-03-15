@@ -794,27 +794,46 @@ function searchOrderById() {
     alert("Không tìm thấy đơn hàng nào với ID đã nhập.");
   }
 }
-// khach hang va lich su
-// Lưu trữ thông tin người dùng
+
+// Lưu trữ thông tin nhân viên
 let users = [
   {
       username: "Truong123",
-      password: "password123",
-      fullName: "Trương Văn A",
-      phone: "0987654321",
-      email: "truong@example.com",
-      address: "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
-      points: 150,
-      joinDate: "15/03/2025"
+      password: "Truong123",
+      fullName: "Nguyễn Hồng Trường",
+      phone: "0365282067",
+      email: "truong.nh.0428@gmail.com",
+      address: "Thiên đường",
+      role: "owner",
+      joinDate: "15/01/2025"
+  },
+  {
+      username: "staff",
+      password: "staff123",
+      fullName: "Lê Văn Nhân",
+      phone: "0987654323",
+      email: "staff@example.com",
+      address: "789 Đường Phạm Ngũ Lão, Phường Phạm Ngũ Lão, Quận 1, TP. Hồ Chí Minh",
+      role: "staff",
+      joinDate: "15/02/2025"
+  },
+  {
+      username: "staff2",
+      password: "staff456",
+      fullName: "Trần Thị Bình",
+      phone: "0987654324",
+      email: "staff2@example.com",
+      address: "456 Đường Hai Bà Trưng, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+      role: "staff",
+      joinDate: "01/03/2025"
   }
 ];
 
 // Người dùng hiện tại
-let currentUser = users[0]; // Đặt mặc định là đã đăng nhập
+let currentUser = null; // Mặc định chưa đăng nhập
 
 // Hiển thị modal đăng nhập
 function showLoginModal() {
-  document.getElementById('registerModal').classList.add('hidden');
   document.getElementById('loginModal').classList.remove('hidden');
 }
 
@@ -823,22 +842,15 @@ function closeLoginModal() {
   document.getElementById('loginModal').classList.add('hidden');
 }
 
-// Hiển thị modal đăng ký
-function showRegisterModal() {
-  document.getElementById('loginModal').classList.add('hidden');
-  document.getElementById('registerModal').classList.remove('hidden');
-}
-
-// Đóng modal đăng ký
-function closeRegisterModal() {
-  document.getElementById('registerModal').classList.add('hidden');
-}
-
 // Hiển thị modal thông tin cá nhân
 function showProfileModal() {
   // Cập nhật thông tin người dùng vào modal
   document.getElementById('profileName').textContent = currentUser.fullName;
-  document.getElementById('profilePoints').textContent = currentUser.points + " điểm";
+  
+  const roleElement = document.getElementById('profileRole');
+  roleElement.textContent = getRoleDisplayName(currentUser.role);
+  roleElement.dataset.role = currentUser.role;
+  
   document.getElementById('profileUsername').textContent = currentUser.username;
   document.getElementById('profilePhone').textContent = currentUser.phone;
   document.getElementById('profileEmail').textContent = currentUser.email;
@@ -853,6 +865,34 @@ function closeProfileModal() {
   document.getElementById('profileModal').classList.add('hidden');
 }
 
+// Hiển thị modal chỉnh sửa thông tin
+function showEditProfileModal() {
+  // Điền thông tin hiện tại vào form
+  document.getElementById('editFullName').value = currentUser.fullName;
+  document.getElementById('editPhone').value = currentUser.phone;
+  document.getElementById('editEmail').value = currentUser.email;
+  document.getElementById('editAddress').value = currentUser.address;
+  document.getElementById('editPassword').value = '';
+  
+  // Hiển thị modal
+  closeProfileModal();
+  document.getElementById('editProfileModal').classList.remove('hidden');
+}
+
+// Đóng modal chỉnh sửa thông tin
+function closeEditProfileModal() {
+  document.getElementById('editProfileModal').classList.add('hidden');
+}
+
+// Chuyển đổi mã cấp bậc sang tên hiển thị
+function getRoleDisplayName(role) {
+  switch(role) {
+    case "owner": return "Chủ cửa hàng";
+    case "staff": return "Nhân viên";
+    default: return "Không xác định";
+  }
+}
+
 // Xử lý đăng nhập
 function handleLogin(e) {
   e.preventDefault();
@@ -863,43 +903,42 @@ function handleLogin(e) {
   const user = users.find(u => u.username === username && u.password === password);
   
   if (user) {
-      currentUser = user;
-      updateProfileDisplay();
-      closeLoginModal();
-      alert('Đăng nhập thành công!');
+    currentUser = user;
+    updateProfileDisplay();
+    closeLoginModal();
+    alert('Đăng nhập thành công!');
   } else {
-      alert('Tên đăng nhập hoặc mật khẩu không đúng!');
+    alert('Tên đăng nhập hoặc mật khẩu không đúng!');
   }
 }
 
-// Xử lý đăng ký
-function handleRegister(e) {
+// Xử lý chỉnh sửa thông tin
+function handleEditProfile(e) {
   e.preventDefault();
   
-  const username = document.getElementById('registerUsername').value;
+  // Cập nhật thông tin người dùng
+  currentUser.fullName = document.getElementById('editFullName').value;
+  currentUser.phone = document.getElementById('editPhone').value;
+  currentUser.email = document.getElementById('editEmail').value;
+  currentUser.address = document.getElementById('editAddress').value;
   
-  // Kiểm tra xem tên đăng nhập đã tồn tại chưa
-  if (users.some(u => u.username === username)) {
-      alert('Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.');
-      return;
+  // Cập nhật mật khẩu nếu được cung cấp
+  const newPassword = document.getElementById('editPassword').value;
+  if (newPassword.trim() !== '') {
+    currentUser.password = newPassword;
   }
   
-  const newUser = {
-      username: username,
-      password: document.getElementById('registerPassword').value,
-      fullName: document.getElementById('registerFullName').value,
-      phone: document.getElementById('registerPhone').value,
-      email: document.getElementById('registerEmail').value,
-      address: document.getElementById('registerAddress').value,
-      points: 0,
-      joinDate: new Date().toLocaleDateString('vi-VN')
-  };
+  // Cập nhật thông tin trong mảng users
+  const userIndex = users.findIndex(u => u.username === currentUser.username);
+  if (userIndex !== -1) {
+    users[userIndex] = currentUser;
+  }
   
-  users.push(newUser);
-  currentUser = newUser;
+  // Cập nhật hiển thị
   updateProfileDisplay();
-  closeRegisterModal();
-  alert('Đăng ký thành công!');
+  closeEditProfileModal();
+  showProfileModal();
+  alert('Cập nhật thông tin thành công!');
 }
 
 // Xử lý đăng xuất
@@ -915,15 +954,16 @@ function updateProfileDisplay() {
   const userProfileElement = document.querySelector('.user-profile');
   
   if (currentUser) {
-      userProfileElement.innerHTML = `
-          ${currentUser.username} <i class="fas fa-user-circle user-icon"></i>
-      `;
-      userProfileElement.onclick = showProfileModal;
+    const roleName = getRoleDisplayName(currentUser.role);
+    userProfileElement.innerHTML = `
+      ${currentUser.fullName} (${roleName}) <i class="fas fa-user-circle user-icon"></i>
+    `;
+    userProfileElement.onclick = showProfileModal;
   } else {
-      userProfileElement.innerHTML = `
-          Đăng nhập <i class="fas fa-sign-in-alt user-icon"></i>
-      `;
-      userProfileElement.onclick = showLoginModal;
+    userProfileElement.innerHTML = `
+      Đăng nhập <i class="fas fa-sign-in-alt user-icon"></i>
+    `;
+    userProfileElement.onclick = showLoginModal;
   }
 }
 
@@ -932,15 +972,18 @@ document.addEventListener('DOMContentLoaded', function() {
   // Thiết lập xử lý form đăng nhập
   const loginForm = document.getElementById('loginForm');
   if (loginForm) {
-      loginForm.addEventListener('submit', handleLogin);
+    loginForm.addEventListener('submit', handleLogin);
   }
   
-  // Thiết lập xử lý form đăng ký
-  const registerForm = document.getElementById('registerForm');
-  if (registerForm) {
-      registerForm.addEventListener('submit', handleRegister);
+  // Thiết lập xử lý form chỉnh sửa thông tin
+  const editProfileForm = document.getElementById('editProfileForm');
+  if (editProfileForm) {
+    editProfileForm.addEventListener('submit', handleEditProfile);
   }
   
   // Cập nhật hiển thị thông tin người dùng
   updateProfileDisplay();
+  
+  // Hiển thị form đăng nhập khi trang được tải
+  showLoginModal();
 });

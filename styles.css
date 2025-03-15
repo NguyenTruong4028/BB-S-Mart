@@ -351,7 +351,7 @@
 
 /* Hidden */
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 /* khach hang */
@@ -475,7 +475,65 @@
   border-radius: 9999px;
 }
 
+/* User Profile Styles */
+.user-profile {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+}
+
+.user-profile:hover {
+  background-color: #1e40af;
+}
+
+/* Form display for profile information */
+.form-display {
+  padding: 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+  min-height: 2.5rem;
+}
+
+/* Badge for user levels */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 9999px;
+}
+
+/* Role-specific badge colors */
+.role-badge[data-role="staff"] {
+  background-color: #3b82f6; /* blue */
+}
+
+.role-badge[data-role="owner"] {
+  background-color: #f59e0b; /* amber */
+}
+
 /* Fix for modal forms in auth pages */
 .modal-content .modal-form {
   display: block;
+}
+
+/* Form inputs */
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
