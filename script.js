@@ -273,6 +273,12 @@ function updatePermissions(e, index) {
 
 // Chuyển tab
 function showTab(tabName) {
+  // Kiểm tra quyền truy cập nếu là tab nhân viên
+  if (tabName === "employees" && !hasEmployeeAccess()) {
+    alert("Bạn không có quyền truy cập vào mục nhân viên!");
+    return;
+  }
+
   const tabs = document.getElementsByClassName("tab-content");
   for (let tab of tabs) {
     tab.classList.add("hidden");
@@ -289,28 +295,19 @@ function showTab(tabName) {
     displayProducts();
   } else if (tabName === "employees") {
     displayEmployees();
+  } else if (tabName === "customers") {
+    displayCustomers();
+  } else if (tabName === "purchaseHistory") {
+    displayOrders();
   }
 
   const navItems = document.getElementsByClassName("nav-item");
   for (let item of navItems) {
     item.classList.remove("active");
   }
-  event.target.classList.add("active");
-}
-
-// Lọc sản phẩm
-function filterProducts() {
-  const filterValue = document.querySelector("#sidebar select").value;
-  let filteredProducts = products;
-  if (filterValue !== "all") {
-    filteredProducts = products.filter((product) => {
-      if (filterValue === "product") return true;
-      if (filterValue === "service") return product.unit === "service";
-      if (filterValue === "combo") return product.unit === "combo";
-      return false;
-    });
+  if (event && event.target) {
+    event.target.classList.add("active");
   }
-  displayProducts(filteredProducts);
 }
 
 // Tìm kiếm sản phẩm
@@ -802,7 +799,13 @@ let users = [
       email: "truong.nh.0428@gmail.com",
       address: "Thiên đường",
       role: "owner",
-      joinDate: "15/01/2025"
+      joinDate: "15/01/2025",
+      permissions: {
+          viewProducts: true,
+          editProducts: true,
+          viewSales: true,
+          manageEmployees: true
+      }
   },
   {
       username: "staff",
@@ -812,7 +815,13 @@ let users = [
       email: "staff@example.com",
       address: "789 Đường Phạm Ngũ Lão, Phường Phạm Ngũ Lão, Quận 1, TP. Hồ Chí Minh",
       role: "staff",
-      joinDate: "15/02/2025"
+      joinDate: "15/02/2025",
+      permissions: {
+          viewProducts: true,
+          editProducts: true,
+          viewSales: true,
+          manageEmployees: false
+      }
   },
   {
       username: "staff2",
@@ -822,7 +831,13 @@ let users = [
       email: "staff2@example.com",
       address: "456 Đường Hai Bà Trưng, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
       role: "staff",
-      joinDate: "01/03/2025"
+      joinDate: "01/03/2025",
+      permissions: {
+          viewProducts: true,
+          editProducts: true,
+          viewSales: true,
+          manageEmployees: false
+      }
   }
 ];
 
@@ -902,6 +917,7 @@ function handleLogin(e) {
   if (user) {
     currentUser = user;
     updateProfileDisplay();
+    updateUIBasedOnPermissions(); // Cập nhật giao diện dựa trên quyền
     closeLoginModal();
     alert('Đăng nhập thành công!');
   } else {
@@ -942,9 +958,37 @@ function handleEditProfile(e) {
 function logout() {
   currentUser = null;
   updateProfileDisplay();
+  updateUIBasedOnPermissions(); // Cập nhật giao diện dựa trên quyền
   closeProfileModal();
   showLoginModal();
+  
+  // Đảm bảo chuyển về tab sản phẩm khi đăng xuất
+  showTab('products');
 }
+
+// Khởi tạo khi trang được tải
+document.addEventListener('DOMContentLoaded', function() {
+  // Thiết lập xử lý form đăng nhập
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
+  }
+  
+  // Thiết lập xử lý form chỉnh sửa thông tin
+  const editProfileForm = document.getElementById('editProfileForm');
+  if (editProfileForm) {
+    editProfileForm.addEventListener('submit', handleEditProfile);
+  }
+  
+  // Cập nhật hiển thị thông tin người dùng
+  updateProfileDisplay();
+  
+  // Cập nhật giao diện dựa trên quyền
+  updateUIBasedOnPermissions();
+  
+  // Hiển thị form đăng nhập khi trang được tải
+  showLoginModal();
+});
 
 // Cập nhật hiển thị thông tin người dùng
 function updateProfileDisplay() {
@@ -984,3 +1028,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // Hiển thị form đăng nhập khi trang được tải
   showLoginModal();
 });
+
+// Hàm kiểm tra quyền truy cập vào mục nhân viên
+function hasEmployeeAccess() {
+  // Nếu chưa đăng nhập hoặc không phải chủ cửa hàng, không có quyền
+  if (!currentUser) {
+    return false;
+  }
+  
+  // Chỉ cho phép người dùng có role là "owner" hoặc có quyền manageEmployees
+  return currentUser.role === "owner" || (currentUser.permissions && currentUser.permissions.manageEmployees);
+};
+
+function updateUIBasedOnPermissions() {
+  const employeesNavItem = document.querySelector('[onclick="showTab(\'employees\')"]');
+  
+  if (employeesNavItem) {
+    if (hasEmployeeAccess()) {
+      employeesNavItem.classList.remove('hidden');
+      employeesNavItem.removeAttribute('disabled');
+    } else {
+      employeesNavItem.classList.add('hidden');
+      employeesNavItem.setAttribute('disabled', 'true');
+    }
+  }
+}
+
