@@ -561,3 +561,32 @@
   display: none !important;
 }
 /* Hết thông tin đăng nhập */
+
+.exitModal {
+  display: none; /* Ẩn modal mặc định */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.exitModal.active {
+  display: block;
+}
+
+.modal-content1 {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-content1 button {
+  min-width: 50px;
+  margin: 0px 5px;
+}
