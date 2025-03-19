@@ -118,9 +118,47 @@
             <div id="customers-tab" class="tab-content hidden">
                 <h2 class="header-title">Khách hàng</h2>
             </div>
+
+            <!-- Tab Bán hàng -->
             <div id="sales-tab" class="tab-content hidden">
-                <h2 class="header-title">Bán hàng</h2>
-                
+                <div class="header-content">
+                    <h2 class="header-title">Bán hàng</h2>
+                    <div class="actions">
+                        <input type="text" id="salesSearchInput" placeholder="Tìm kiếm hàng hóa" class="search-input" onkeyup="searchSalesProducts()">
+                    </div>
+                </div>
+                <div class="sales-container">
+                    <!-- Cart Table -->
+                    <div class="cart-section">
+                        <table class="cart-table">
+                            <thead>
+                                <tr class="table-header">
+                                    <th class="table-cell"></th>
+                                    <th class="table-cell">Mã hàng</th>
+                                    <th class="table-cell">Tên hàng</th>
+                                    <th class="table-cell">Số lượng</th>
+                                    <th class="table-cell">Đơn giá</th>
+                                    <th class="table-cell">Thành tiền</th>
+                                    <th class="table-cell"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cartList"></tbody>
+                        </table>
+                        <div class="cart-footer">
+                            <div class="cart-total">
+                                <span>Tổng tiền hàng:</span>
+                                <span id="cartTotal">0</span>
+                            </div>
+                            <button class="btn-checkout" onclick="openCheckoutModal()">
+                                <i class="fas fa-money-check btn-icon"></i> Thanh toán
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Product Grid -->
+                    <div class="product-grid">
+                        <div id="salesProductList" class="grid-items"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal thêm/sửa hàng hóa -->
@@ -336,6 +374,177 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Modal Thanh toán -->
+            <div id="checkoutModal" class="modal hidden">
+                <div class="modal-content checkout-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Khách lẻ</h1>
+                        <button class="modal-close" onclick="closeCheckoutModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="checkout-details">
+                        <div class="checkout-row">
+                            <span>Tổng tiền hàng</span>
+                            <span id="checkoutTotalItems">2</span>
+                            <span id="checkoutTotalAmount">0</span>
+                        </div>
+                        <div class="checkout-row">
+                            <span>Giảm giá</span>
+                            <span>0</span>
+                        </div>
+                        <div class="checkout-row">
+                            <span>Khách cần trả</span>
+                            <span id="checkoutAmountToPay">0</span>
+                        </div>
+                        <div class="checkout-row">
+                            <span>Khách thanh toán</span>
+                            <span id="checkoutPaidAmount">0</span>
+                        </div>
+                        <div class="checkout-row">
+                            <span>Tiền thừa trả khách</span>
+                            <span id="checkoutChangeAmount">0</span>
+                        </div>
+                        <div class="checkout-row">
+                            <span>Khách trả tiền</span>
+                            <input type="number" id="checkoutCustomerPayment" class="checkout-input" value="0" onchange="updatePaymentOptions()">
+                        </div>
+                        <div class="checkout-row">
+                            <span>Phương thức thanh toán</span>
+                            <div class="payment-options">
+                                <label><input type="radio" name="paymentMethod" value="cash" checked> Tiền mặt</label>
+                                <label><input type="radio" name="paymentMethod" value="transfer"> Chuyển khoản</label>
+                                <label><input type="radio" name="paymentMethod" value="the"> Thẻ</label>
+                                <label>
+                                    <input type="radio" name="paymentMethod" value="vi"> Ví
+                                    <button class="more-options-btn" onclick="openActualPaymentModal()"><i class="fas fa-ellipsis-h"></i></button>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="checkout-row suggested-amounts">
+                            <button onclick="setPaymentAmount(490000)">490,000</button>
+                            <button onclick="setPaymentAmount(500000)">500,000</button>
+                            <button onclick="setPaymentAmount(600000)">600,000</button>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-save" onclick="confirmCheckout()">
+                            <i class="fas fa-check btn-icon"></i> THANH TOÁN
+                        </button>
+                        <button class="btn-cancel" onclick="closeCheckoutModal()">
+                            <i class="fas fa-times btn-icon"></i> Bỏ qua
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Thanh toán thực tế -->
+            <div id="actualPaymentModal" class="modal hidden">
+                <div class="modal-content actual-payment-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Thanh toán niên phương thức</h1>
+                        <button class="modal-close" onclick="closeActualPaymentModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="actual-payment-details">
+                        <div class="actual-payment-row">
+                            <span>Số tiền</span>
+                            <input type="number" id="actualPaymentInput" class="actual-payment-input" value="0">
+                        </div>
+                        <div class="actual-payment-row suggested-amounts">
+                            <button onclick="setActualPaymentAmount(0)">0</button>
+                            <button onclick="setActualPaymentAmount(490000)">490,000</button>
+                            <button onclick="setActualPaymentAmount(500000)">500,000</button>
+                            <button onclick="setActualPaymentAmount(600000)">600,000</button>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-save" onclick="confirmActualPayment()">
+                            <i class="fas fa-check btn-icon"></i> Xong
+                        </button>
+                        <button class="btn-cancel" onclick="closeActualPaymentModal()">
+                            <i class="fas fa-times btn-icon"></i> Bỏ qua
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification -->
+            <div id="notification" class="notification hidden">
+                <i class="fas fa-check-circle notification-icon"></i>
+                <span>Hóa đơn được cập nhật thành công</span>
+            </div>
+
+            <!-- Modal In Hóa Đơn -->
+            <div id="invoiceModal" class="modal hidden">
+                <div class="modal-content invoice-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title">In Hóa Đơn</h1>
+                        <button class="modal-close" onclick="closeInvoiceModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="invoice-preview">
+                        <div class="invoice-header">
+                            <img src="https://via.placeholder.com/100x30?text=KiotViet" alt="KiotViet Logo" class="invoice-logo">
+                            <h2>Chú thích: Bán hàng</h2>
+                            <p>
+                                taphoangcottrinh.KiotViet.vn/sale/#/ <br>
+                                Mã đơn: 0375014922 <br>
+                                HĐ: BÁN HÀNG <br>
+                                Khách hàng: Khách lẻ <br>
+                                Ngày lập: 18/03/2025
+                            </p>
+                        </div>
+                        <table class="invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoiceItems"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">Tổng tiền hàng</td>
+                                    <td id="invoiceTotal">0</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Tổng chiết khấu</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Quyết toán trên hóa đơn</td>
+                                    <td id="invoiceFinalTotal">0</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Tiền khách trả</td>
+                                    <td id="invoicePaid">0</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Tiền thừa trả khách</td>
+                                    <td id="invoiceChange">0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="invoice-footer">
+                            <p>Cảm ơn quý khách! Mời quý khách quay lại</p>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-save" onclick="printInvoice()">
+                            <i class="fas fa-print btn-icon"></i> In
+                        </button>
+                        <button class="btn-cancel" onclick="closeInvoiceModal()">
+                            <i class="fas fa-times btn-icon"></i> Đóng
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
