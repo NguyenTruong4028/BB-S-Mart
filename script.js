@@ -362,13 +362,15 @@ function displayCustomers(filteredCustomers = customers) {
             <td class="table-cell">${customer.createdAt}</td>
              <td class="table-cell">${customer.points}</td>
              <td class="table-cell" style="width: fit-content;">
-              <button  onclick="showTab('purchaseHistory')" style="display: flex;" >
-              <i class="fas fa-history nav-icon"></i> <span>Lịch sử</span>
-              </button>
+              <span onclick="showTab('purchaseHistory')" style="display: flex; height: 40px; align-items: center; cursor: pointer;" >
+              <i class="fas fa-history nav-icon" style="margin-right: 5px"></i> <span style="width: 50px; text-decoration: underline">Lịch sử</span>
+              </span>
             </td>
-            <td class="table-cell" style="display: flex">
+            <td class="table-cell">
+              <div style="display: flex; justify-content: center; align-items: center">
                 <button class="action-btn btn-edit" onclick="openCustomerModal('edit', ${index})"><i class="fas fa-edit"></i></button>
                 <button class="action-btn btn-delete" onclick="deleteCustomer(${index})"><i class="fas fa-trash"></i></button>
+                </div>
             </td>
         `;
     customerList.appendChild(row);
