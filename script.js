@@ -404,15 +404,8 @@ function openCustomerModal(type, index = null) {
 
 // Đóng modal khách hàng
 function closeCustomerModal() {
-  console.log("helllo");
-  document.querySelector(".exitModal").classList.toggle("active");
-  document.querySelector("#confirmExit").addEventListener("click", () => {
-    document.querySelector(".exitModal").classList.remove("active");
+  if (confirm("Bạn có chắc chắn muốn thoát không?"))
     document.getElementById("customerModal").classList.add("hidden");
-  });
-  document.querySelector("#cancelExit").addEventListener("click", () => {
-    document.querySelector(".exitModal").classList.remove("active");
-  });
 }
 
 // Thêm khách hàng mới
