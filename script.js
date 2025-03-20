@@ -179,13 +179,27 @@ function openEmployeeModal(type, index = null) {
     document.getElementById("employeeName").value = employee.name;
     document.getElementById("employeePhone").value = employee.phone;
     document.getElementById("employeeEmail").value = employee.email;
+    document.getElementById("employeeAddress").value = employee.address || '';
     document.getElementById("employeeRole").value = employee.role;
     form.onsubmit = (e) => updateEmployee(e, index);
   }
 }
 
 // Đóng modal nhân viên
-function closeEmployeeModal() {
+function closeEmployeeModal(forceClose = false) {
+  const form = document.getElementById("employeeForm");
+  const inputs = form.querySelectorAll("input, select");
+  let isDirty = false;
+  
+  if (!forceClose) { // Chỉ kiểm tra khi không phải sau khi lưu
+    inputs.forEach(input => {
+      if (input.value) isDirty = true;
+    });
+    if (isDirty && !confirm("Bạn có chắc muốn thoát mà không lưu không?")) {
+      return;
+    }
+  }
+  
   document.getElementById("employeeModal").classList.add("hidden");
 }
 
@@ -194,37 +208,77 @@ function addEmployee(e) {
   e.preventDefault();
   const employee = {
     id: `NV${Date.now()}`,
-    name: document.getElementById("employeeName").value,
-    phone: document.getElementById("employeePhone").value,
-    email: document.getElementById("employeeEmail").value,
+    name: document.getElementById("employeeName").value.trim(),
+    phone: document.getElementById("employeePhone").value.trim(),
+    email: document.getElementById("employeeEmail").value.trim(),
+    address: document.getElementById("employeeAddress").value.trim(),
     role: document.getElementById("employeeRole").value,
-    permissions: {
-      viewProducts: false,
-      editProducts: false,
-      viewSales: false,
-      manageEmployees: false,
-    },
+    permissions: getDefaultPermissions(document.getElementById("employeeRole").value),
     createdAt: new Date().toLocaleString(),
   };
+  
+  if (!employee.name || !employee.phone.match(/^[0-9]{10}$/)) {
+    alert("Vui lòng nhập đúng tên và số điện thoại (10 chữ số)!");
+    return;
+  }
+  
   employees.push(employee);
   displayEmployees();
-  closeEmployeeModal();
+  document.getElementById("employeeForm").reset(); // Reset form sau khi lưu
+  closeEmployeeModal(true); // Gọi với forceClose = true
 }
 
 // Sửa nhân viên
 function updateEmployee(e, index) {
   e.preventDefault();
+  const name = document.getElementById("employeeName").value.trim();
+  const phone = document.getElementById("employeePhone").value.trim();
+  
+  if (!name || !phone.match(/^[0-9]{10}$/)) {
+    alert("Vui lòng nhập đúng tên và số điện thoại (10 chữ số)!");
+    return;
+  }
+  
   employees[index] = {
     id: document.getElementById("employeeCode").value,
-    name: document.getElementById("employeeName").value,
-    phone: document.getElementById("employeePhone").value,
-    email: document.getElementById("employeeEmail").value,
+    name: name,
+    phone: phone,
+    email: document.getElementById("employeeEmail").value.trim(),
+    address: document.getElementById("employeeAddress").value.trim(),
     role: document.getElementById("employeeRole").value,
     permissions: employees[index].permissions,
     createdAt: employees[index].createdAt,
   };
   displayEmployees();
-  closeEmployeeModal();
+  document.getElementById("employeeForm").reset(); // Reset form sau khi lưu
+  closeEmployeeModal(true); // Gọi với forceClose = true
+}
+
+function getDefaultPermissions(role) {
+  const permissions = {
+    viewInventory: false,
+    manageInventory: false,
+    viewSales: false,
+    manageSales: false,
+    viewEmployees: false,
+    manageEmployees: false,
+    viewReports: false
+  };
+  
+  switch (role) {
+    case "nhanvien":
+      permissions.viewInventory = true;
+      permissions.viewSales = true;
+      break;
+    case "hocviec":
+      permissions.viewInventory = true;
+      break;
+    case "ketoan":
+      permissions.viewSales = true;
+      permissions.viewReports = true;
+      break;
+  }
+  return permissions;
 }
 
 // Xóa nhân viên
@@ -242,17 +296,18 @@ function openPermissionModal(index) {
   const employee = employees[index];
 
   document.getElementById("employeeNameDisplay").textContent = employee.name;
-  document.getElementById("viewProducts").checked =
-    employee.permissions.viewProducts;
-  document.getElementById("editProducts").checked =
-    employee.permissions.editProducts;
+  document.getElementById("viewInventory").checked = employee.permissions.viewInventory;
+  document.getElementById("manageInventory").checked = employee.permissions.manageInventory;
   document.getElementById("viewSales").checked = employee.permissions.viewSales;
-  document.getElementById("manageEmployees").checked =
-    employee.permissions.manageEmployees;
+  document.getElementById("manageSales").checked = employee.permissions.manageSales;
+  document.getElementById("viewEmployees").checked = employee.permissions.viewEmployees;
+  document.getElementById("manageEmployees").checked = employee.permissions.manageEmployees;
+  document.getElementById("viewReports").checked = employee.permissions.viewReports;
 
   form.onsubmit = (e) => updatePermissions(e, index);
   modal.classList.remove("hidden");
 }
+
 
 // Đóng modal phân quyền
 function closePermissionModal() {
@@ -263,12 +318,39 @@ function closePermissionModal() {
 function updatePermissions(e, index) {
   e.preventDefault();
   employees[index].permissions = {
-    viewProducts: document.getElementById("viewProducts").checked,
-    editProducts: document.getElementById("editProducts").checked,
+    viewInventory: document.getElementById("viewInventory").checked,
+    manageInventory: document.getElementById("manageInventory").checked,
     viewSales: document.getElementById("viewSales").checked,
+    manageSales: document.getElementById("manageSales").checked,
+    viewEmployees: document.getElementById("viewEmployees").checked,
     manageEmployees: document.getElementById("manageEmployees").checked,
+    viewReports: document.getElementById("viewReports").checked,
   };
   closePermissionModal();
+}
+
+function displayEmployees() {
+  const tbody = document.getElementById("employeeList");
+  tbody.innerHTML = "";
+  employees.forEach((employee, index) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="table-cell"><input type="checkbox" /></td>
+      <td class="table-cell">${employee.id}</td>
+      <td class="table-cell">${employee.name}</td>
+      <td class="table-cell">${employee.phone}</td>
+      <td class="table-cell">${employee.email}</td>
+      <td class="table-cell">${employee.role === 'nhanvien' ? 'Nhân viên' : 
+                              employee.role === 'hocviec' ? 'Học việc' : 'Kế toán'}</td>
+      <td class="table-cell">${employee.createdAt}</td>
+      <td class="table-cell">
+        <button onclick="openEmployeeModal('edit', ${index})">Sửa</button>
+        <button onclick="deleteEmployee(${index})">Xóa</button>
+        <button onclick="openPermissionModal(${index})">Phân quyền</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
 // Chuyển tab
