@@ -339,50 +339,44 @@
             </div>
             <form id="permissionForm" class="modal-form">
               <div class="form-group">
-                <label class="form-label"
-                  >Tên nhân viên: <span id="employeeNameDisplay"></span
-                ></label>
+                <label class="form-label">Tên nhân viên: <span id="employeeNameDisplay"></span></label>
               </div>
               <div class="form-group">
                 <label class="form-label">Quyền truy cập</label>
                 <div class="form-group flex items-center">
-                  <input
-                    id="viewProducts"
-                    class="form-checkbox"
-                    type="checkbox"
-                  />
-                  <label class="form-label ml-2">Xem hàng hóa</label>
+                  <input id="viewInventory" class="form-checkbox" type="checkbox" />
+                  <label class="form-label ml-2">Xem kho hàng</label>
                 </div>
                 <div class="form-group flex items-center">
-                  <input
-                    id="editProducts"
-                    class="form-checkbox"
-                    type="checkbox"
-                  />
-                  <label class="form-label ml-2">Sửa hàng hóa</label>
+                  <input id="manageInventory" class="form-checkbox" type="checkbox" />
+                  <label class="form-label ml-2">Quản lý kho hàng</label>
                 </div>
                 <div class="form-group flex items-center">
                   <input id="viewSales" class="form-checkbox" type="checkbox" />
-                  <label class="form-label ml-2">Xem bán hàng</label>
+                  <label class="form-label ml-2">Xem doanh thu</label>
                 </div>
                 <div class="form-group flex items-center">
-                  <input
-                    id="manageEmployees"
-                    class="form-checkbox"
-                    type="checkbox"
-                  />
+                  <input id="manageSales" class="form-checkbox" type="checkbox" />
+                  <label class="form-label ml-2">Quản lý bán hàng</label>
+                </div>
+                <div class="form-group flex items-center">
+                  <input id="viewEmployees" class="form-checkbox" type="checkbox" />
+                  <label class="form-label ml-2">Xem danh sách nhân viên</label>
+                </div>
+                <div class="form-group flex items-center">
+                  <input id="manageEmployees" class="form-checkbox" type="checkbox" />
                   <label class="form-label ml-2">Quản lý nhân viên</label>
+                </div>
+                <div class="form-group flex items-center">
+                  <input id="viewReports" class="form-checkbox" type="checkbox" />
+                  <label class="form-label ml-2">Xem báo cáo</label>
                 </div>
               </div>
               <div class="modal-actions">
                 <button type="submit" class="btn-save">
                   <i class="fas fa-save btn-icon"></i> Lưu
                 </button>
-                <button
-                  type="button"
-                  onclick="closePermissionModal()"
-                  class="btn-cancel"
-                >
+                <button type="button" onclick="closePermissionModal()" class="btn-cancel">
                   <i class="fas fa-times btn-icon"></i> Bỏ qua
                 </button>
               </div>
@@ -393,9 +387,7 @@
         <div id="employeeModal" class="modal hidden">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 id="employeeModalTitle" class="modal-title">
-                Thêm nhân viên
-              </h1>
+              <h1 id="employeeModalTitle" class="modal-title">Thêm nhân viên</h1>
               <button class="modal-close" onclick="closeEmployeeModal()">
                 <i class="fas fa-times"></i>
               </button>
@@ -405,21 +397,15 @@
                 <div>
                   <div class="form-group">
                     <label class="form-label">Mã nhân viên</label>
-                    <input
-                      id="employeeCode"
-                      class="form-input"
-                      disabled
-                      placeholder="Mã tự động"
-                      type="text"
-                    />
+                    <input id="employeeCode" class="form-input" disabled placeholder="Mã tự động" type="text" />
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Tên nhân viên</label>
-                    <input id="employeeName" class="form-input" type="text" />
+                    <label class="form-label">Tên nhân viên <span class="text-red-500">*</span></label>
+                    <input id="employeeName" class="form-input" type="text" required />
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Số điện thoại</label>
-                    <input id="employeePhone" class="form-input" type="text" />
+                    <label class="form-label">Số điện thoại <span class="text-red-500">*</span></label>
+                    <input id="employeePhone" class="form-input" type="tel" pattern="[0-9]{10}" required />
                   </div>
                 </div>
                 <div>
@@ -428,11 +414,15 @@
                     <input id="employeeEmail" class="form-input" type="email" />
                   </div>
                   <div class="form-group">
+                    <label class="form-label">Địa chỉ</label>
+                    <input id="employeeAddress" class="form-input" type="text" />
+                  </div>
+                  <div class="form-group">
                     <label class="form-label">Vai trò</label>
                     <select id="employeeRole" class="form-select">
-                      <option value="staff">Nhân viên</option>
-                      <option value="manager">Quản lý</option>
-                      <option value="admin">Admin</option>
+                      <option value="nhanvien">Nhân viên</option>
+                      <option value="hocviec">Học việc</option>
+                      <option value="ketoan">Kế toán</option>
                     </select>
                   </div>
                 </div>
@@ -441,11 +431,7 @@
                 <button type="submit" class="btn-save">
                   <i class="fas fa-save btn-icon"></i> Lưu
                 </button>
-                <button
-                  type="button"
-                  onclick="closeEmployeeModal()"
-                  class="btn-cancel"
-                >
+                <button type="button" onclick="closeEmployeeModal()" class="btn-cancel">
                   <i class="fas fa-times btn-icon"></i> Bỏ qua
                 </button>
               </div>
