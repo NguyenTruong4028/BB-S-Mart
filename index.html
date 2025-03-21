@@ -124,10 +124,29 @@
                 <div class="header-content">
                     <h2 class="header-title">Bán hàng</h2>
                     <div class="actions">
-                        <input type="text" id="salesSearchInput" placeholder="Tìm kiếm hàng hóa" class="search-input" onkeyup="searchSalesProducts()">
+                        <input type="text" id="salesSearchInput" placeholder="Tìm khách hàng (F4)" class="search-input" onkeyup="searchSalesProducts()">
+                        <button class="btn-icon-only" onclick="toggleSalesSidebar()">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <button class="btn-icon-only">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                        <button class="btn-icon-only">
+                            <i class="fas fa-image"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="sales-container">
+                    <!-- Sales Sidebar -->
+                    <nav class="sales-sidebar hidden" id="salesSidebar">
+                        <h3 class="sidebar-title">Phân loại hàng</h3>
+                        <ul class="category-list">
+                            <li class="category-item" onclick="filterSalesByCategory('all')">Tất cả</li>
+                            <li class="category-item" onclick="filterSalesByCategory('Bánh')">Bánh</li>
+                            <li class="category-item" onclick="filterSalesByCategory('Đồ trang trí')">Đồ trang trí</li>
+                            <li class="category-item" onclick="filterSalesByCategory('Giấy gói')">Giấy gói</li>
+                        </ul>
+                    </nav>
                     <!-- Cart Table -->
                     <div class="cart-section">
                         <table class="cart-table">
@@ -157,6 +176,11 @@
                     <!-- Product Grid -->
                     <div class="product-grid">
                         <div id="salesProductList" class="grid-items"></div>
+                        <div class="pagination">
+                            <button class="pagination-btn" onclick="changePage(-1)"><</button>
+                            <span id="pageInfo">1/1</span>
+                            <button class="pagination-btn" onclick="changePage(1)">></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -194,8 +218,9 @@
                                     <div class="form-select-group">
                                         <select id="productCategory" class="form-select">
                                             <option>---Lựa chọn---</option>
-                                            <option value="category1">Danh mục 1</option>
-                                            <option value="category2">Danh mục 2</option>
+                                            <option value="Bánh">Bánh</option>
+                                            <option value="Đồ trang trí">Đồ trang trí</option>
+                                            <option value="Giấy gói">Giấy gói</option>
                                         </select>
                                         <button class="form-select-btn"><i class="fas fa-plus"></i></button>
                                     </div>
@@ -389,45 +414,34 @@
                     <div class="checkout-details">
                         <div class="checkout-row">
                             <span>Tổng tiền hàng</span>
-                            <span id="checkoutTotalItems">2</span>
+                            <span id="checkoutTotalItems">0</span>
                             <span id="checkoutTotalAmount">0</span>
                         </div>
                         <div class="checkout-row">
-                            <span>Giảm giá</span>
-                            <span>0</span>
+                            <span>Giảm giá (%)</span>
+                            <input type="number" id="discountPercent" class="checkout-input" value="0" min="0" max="100" onchange="updatePaymentOptions()">
+                        </div>
+                        <div class="checkout-row">
+                            <span>Giảm giá (VNĐ)</span>
+                            <span id="discountAmount">0</span>
                         </div>
                         <div class="checkout-row">
                             <span>Khách cần trả</span>
                             <span id="checkoutAmountToPay">0</span>
                         </div>
                         <div class="checkout-row">
-                            <span>Khách thanh toán</span>
-                            <span id="checkoutPaidAmount">0</span>
+                            <span>Khách trả tiền</span>
+                            <input type="number" id="checkoutCustomerPayment" class="checkout-input" value="0" onchange="updatePaymentOptions()">
                         </div>
                         <div class="checkout-row">
                             <span>Tiền thừa trả khách</span>
                             <span id="checkoutChangeAmount">0</span>
                         </div>
-                        <div class="checkout-row">
-                            <span>Khách trả tiền</span>
-                            <input type="number" id="checkoutCustomerPayment" class="checkout-input" value="0" onchange="updatePaymentOptions()">
-                        </div>
-                        <div class="checkout-row">
-                            <span>Phương thức thanh toán</span>
-                            <div class="payment-options">
-                                <label><input type="radio" name="paymentMethod" value="cash" checked> Tiền mặt</label>
-                                <label><input type="radio" name="paymentMethod" value="transfer"> Chuyển khoản</label>
-                                <label><input type="radio" name="paymentMethod" value="the"> Thẻ</label>
-                                <label>
-                                    <input type="radio" name="paymentMethod" value="vi"> Ví
-                                    <button class="more-options-btn" onclick="openActualPaymentModal()"><i class="fas fa-ellipsis-h"></i></button>
-                                </label>
-                            </div>
-                        </div>
                         <div class="checkout-row suggested-amounts">
-                            <button onclick="setPaymentAmount(490000)">490,000</button>
+                            <button onclick="setPaymentAmount(50000)">50,000</button>
+                            <button onclick="setPaymentAmount(100000)">100,000</button>
+                            <button onclick="setPaymentAmount(200000)">200,000</button>
                             <button onclick="setPaymentAmount(500000)">500,000</button>
-                            <button onclick="setPaymentAmount(600000)">600,000</button>
                         </div>
                     </div>
                     <div class="modal-actions">
@@ -435,38 +449,6 @@
                             <i class="fas fa-check btn-icon"></i> THANH TOÁN
                         </button>
                         <button class="btn-cancel" onclick="closeCheckoutModal()">
-                            <i class="fas fa-times btn-icon"></i> Bỏ qua
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Thanh toán thực tế -->
-            <div id="actualPaymentModal" class="modal hidden">
-                <div class="modal-content actual-payment-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title">Thanh toán niên phương thức</h1>
-                        <button class="modal-close" onclick="closeActualPaymentModal()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="actual-payment-details">
-                        <div class="actual-payment-row">
-                            <span>Số tiền</span>
-                            <input type="number" id="actualPaymentInput" class="actual-payment-input" value="0">
-                        </div>
-                        <div class="actual-payment-row suggested-amounts">
-                            <button onclick="setActualPaymentAmount(0)">0</button>
-                            <button onclick="setActualPaymentAmount(490000)">490,000</button>
-                            <button onclick="setActualPaymentAmount(500000)">500,000</button>
-                            <button onclick="setActualPaymentAmount(600000)">600,000</button>
-                        </div>
-                    </div>
-                    <div class="modal-actions">
-                        <button class="btn-save" onclick="confirmActualPayment()">
-                            <i class="fas fa-check btn-icon"></i> Xong
-                        </button>
-                        <button class="btn-cancel" onclick="closeActualPaymentModal()">
                             <i class="fas fa-times btn-icon"></i> Bỏ qua
                         </button>
                     </div>
@@ -517,7 +499,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3">Tổng chiết khấu</td>
-                                    <td>0</td>
+                                    <td id="invoiceDiscount">0</td>
                                 </tr>
                                 <tr>
                                     <td colspan="3">Quyết toán trên hóa đơn</td>
